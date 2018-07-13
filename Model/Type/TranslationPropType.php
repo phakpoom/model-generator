@@ -151,6 +151,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
                 $translationClass->addExtend(AbstractTranslation::class);
                 $propType = IntPropType::create('id');
 
+                $propType->addProperty($translationClass);
                 $propType->addGetter($translationClass);
                 $propType->addSetter($translationClass);
 
