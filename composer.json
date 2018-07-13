@@ -1,0 +1,22 @@
+{
+  "name": "phakpoom/model-generator",
+  "license": "MIT",
+  "type": "library",
+  "autoload": {
+    "psr-4": {
+      "Bonn\\Generator\\": ""
+    }
+  },
+  "require": {
+    "php": ">=7.2",
+    "nette/php-generator": "^3.1"
+  },
+  "require-dev": {
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "extra": {
+    "branch-alias": null
+  }
+}
