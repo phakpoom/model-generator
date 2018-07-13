@@ -149,7 +149,6 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
                 $classNamespace->addUse(AbstractTranslation::class);
                 $translationClass = $classNamespace->addClass($this->getTranslationClassName($classType));
                 $translationClass->addExtend(AbstractTranslation::class);
-                $translationClass->addExtend(ResourceInterface::class);
                 $propType = IntPropType::create('id');
 
                 $propType->addGetter($translationClass);
@@ -174,8 +173,10 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
 
                 $interfaceNamespace = new PhpNamespace($classType->getNamespace()->getName());
                 $interfaceNamespace->addUse(TranslationInterface::class);
+                $interfaceNamespace->addUse(ResourceInterface::class);
                 $translationInterfaceClass = $interfaceNamespace->addInterface($this->getTranslationInterfaceName($classType));
                 $translationInterfaceClass->addExtend(TranslationInterface::class);
+                $translationInterfaceClass->addExtend(ResourceInterface::class);
 
                 $storage->addInterfaces($translationInterfaceClass);
             }
