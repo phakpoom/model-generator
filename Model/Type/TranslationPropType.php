@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Bonn\Generator\Model\Type;
 
 use Bonn\Generator\Model\ClassGeneratedStorageInterface;
-use Bonn\Generator\Model\Type\ModifyClassAbleInterface;
-use Bonn\Generator\Model\Type\PropTypeInterface;
-use Bonn\Generator\Model\Type\StringPropType;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpNamespace;
 use Sylius\Component\Resource\Model\AbstractTranslation;
+use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
@@ -151,6 +149,11 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
                 $classNamespace->addUse(AbstractTranslation::class);
                 $translationClass = $classNamespace->addClass($this->getTranslationClassName($classType));
                 $translationClass->addExtend(AbstractTranslation::class);
+                $translationClass->addExtend(ResourceInterface::class);
+                $propType = IntPropType::create('id');
+
+                $propType->addGetter($translationClass);
+                $propType->addSetter($translationClass);
 
                 $storage->addClasses($translationClass);
             }
