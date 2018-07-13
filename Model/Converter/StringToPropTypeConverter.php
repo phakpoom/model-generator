@@ -11,6 +11,7 @@ use Bonn\Generator\Model\Type\InterfacePropType;
 use Bonn\Generator\Model\Type\IntPropType;
 use Bonn\Generator\Model\Type\PropTypeInterface;
 use Bonn\Generator\Model\Type\StringPropType;
+use Bonn\Generator\Model\Type\TranslationPropType;
 
 final class StringToPropTypeConverter implements StringToPropTypeConverterInterface
 {
@@ -25,6 +26,7 @@ final class StringToPropTypeConverter implements StringToPropTypeConverterInterf
         FloatPropType::class,
         StringPropType::class,
         InterfacePropType::class,
+        TranslationPropType::class,
         ArrayPropType::class,
         CollectionPropType::class
     ];
