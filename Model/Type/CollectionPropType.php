@@ -2,13 +2,14 @@
 
 namespace Bonn\Generator\Model\Type;
 
-use Bonn\Generator\Model\NameResolver;
+use Bonn\Generator\NameResolver;
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\Method;
 
-class CollectionPropType implements PropTypeInterface, ConstructorAwareInterface
+class CollectionPropType implements PropTypeInterface, ConstructorAwareInterface, DoctrineMappingInterface
 {
     private $name;
     private $fullInterfaceName;
@@ -134,6 +135,20 @@ class CollectionPropType implements PropTypeInterface, ConstructorAwareInterface
             ->addParameter($singleName);
         $method->setComment("\n @param " . $this->interfaceName . " $$singleName" . "\n");
         $parameter->setTypeHint($this->fullInterfaceName);
+    }
+
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $onlyClassName = NameResolver::resolveOnlyClassName($options['class']);
+
+        $field = $XMLElement->addChild('one-to-many');
+        $field->addAttribute('field', $this->name);
+        $field->addAttribute('target-entity', $this->fullInterfaceName);
+        $field->addAttribute('mapped-by', $onlyClassName);
+        $field->addAttribute('fetch', 'EXTRA_LAZY');
+        $field->addAttribute('orphan-removal', 'true');
+        $cascade = $field->addChild('cascade');
+        $cascade->addChild('cascade-all');
     }
 
     /**

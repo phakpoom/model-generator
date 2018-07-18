@@ -11,22 +11,36 @@
 ],
 ```
 
-### services.xml
-```xml
-<service id="bonn.generator.command.generate_model_command" class="Bonn\Generator\Command\GenerateModelCommand">
-     <tag name="console.command" />
-</service>
+### In Symfony Extension
+```php
+    private function registerCommands(ContainerBuilder $container)
+    {
+        if (true !== $container->getParameter('kernel.debug')) {
+            return;
+        }
+        
+      
+        $def = new Definition("Bonn\\Generator\\Command\\GenerateModelCommand");
+        $def->addTag('console.command');
+        $container->setDefinition('bonn.generator.command.generate_model_command', $def);
+        
+        
+        $def = new Definition(Bonn\\Generator\\Command\\GenerateSyliusCommand);
+        $def->addTag('console.command');
+        $container->setDefinition('bonn.generator.command.generate_sylius_command', $def);
+    }
 ```
 
-### usage
+### usage model generate
 1. interactive input
 `$ php ./bin/console bonn:generate:model`
 2. from string input
 `$ php ./bin/console bonn:generate:model -s "your string"`
 **(string format please see output comment in your class after 1. generated)**
 
-options: 
-`--with-timestramp`, `--with-code`
+### usage sylius generate
+1. interactive input
+`$ php ./bin/console bonn:generate:sylius`
 
 ### custom type
 ```yml
@@ -37,4 +51,4 @@ parameters:
 
 TODOs
 - [ ] Testing
-- [ ] Support Translationable Sylius
+- [x] Support Translationable Sylius

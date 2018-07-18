@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Bonn\Generator\Model\Type;
 
-use Bonn\Generator\Model\ClassGeneratedStorageInterface;
+use Bonn\Generator\Model\DoctrineMappingGenerator;
+use Bonn\Generator\Model\ModelGenerator;
+use Bonn\Generator\NameResolver;
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpNamespace;
 use Sylius\Component\Resource\Model\AbstractTranslation;
@@ -13,7 +16,7 @@ use Sylius\Component\Resource\Model\TranslatableInterface;
 use Sylius\Component\Resource\Model\TranslatableTrait;
 use Sylius\Component\Resource\Model\TranslationInterface;
 
-class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
+class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface, DoctrineMappingInterface
 {
     private $name;
     private $defaultValue;
@@ -119,22 +122,48 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
     /**
      * {@inheritdoc}
      */
-    public function getUses(): array
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
     {
-        return [
+        $fullClassName = $options['class'];
+        $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
+        /** @var \SimpleXMLElement $xml */
+        if (isset($storage->all()[$onlyClassName. 'Translation.orm.xml'])) {
+            $xml = $storage->all()[$onlyClassName. 'Translation.orm.xml'];
+            $mappedSuper = $xml->{'mapped-superclass'};
+        } else {
+            $xml = DoctrineMappingGenerator::createDoctrineMappingXml();
+            $mappedSuper = $xml->addChild('mapped-superclass');
+            $id = $mappedSuper->addChild('id');
+            $id->addAttribute('name', 'id');
+            $id->addAttribute('type', 'integer');
+            $id->addChild('generator')->addAttribute('strategy', 'AUTO');
+            $mappedSuper->addAttribute('name', $fullClassName);
+            $mappedSuper->addAttribute('table', strtolower(explode('\\', $fullClassName)[0]) . '_' . NameResolver::camelToUnderScore($onlyClassName) . '_translation');
 
-        ];
+            $storage->add($xml, $onlyClassName. 'Translation.orm.xml', $options['doctrine_resource_mapping_dir'] . $onlyClassName .'Translation.orm.xml');
+        }
+
+        $propType = StringPropType::create($this->name);
+        $propType->map($mappedSuper, $storage, $options);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function modify(ClassType $classType, ClassGeneratedStorageInterface $storage)
+    public function getUses(): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function modify(ClassType $classType, CodeGeneratedStorageInterface $storage)
     {
         if ($classType->getType() === ClassType::TYPE_CLASS) {
             $translationClass = null;
-            if (isset($storage->getClasses()[$this->getTranslationClassName($classType)])) {
-                $translationClass = $storage->getClasses()[$this->getTranslationClassName($classType)];
+            if (isset($storage->all()[$this->getTranslationClassName($classType)])) {
+                $translationClass = $storage->all()[$this->getTranslationClassName($classType)];
             }
 
             if (null === $translationClass) {
@@ -155,7 +184,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
                 $propType->addGetter($translationClass);
                 $propType->addSetter($translationClass);
 
-                $storage->addClasses($translationClass);
+                $storage->add($translationClass, $translationClass->getName());
             }
 
             $propType = StringPropType::create($this->name);
@@ -164,8 +193,8 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
             $propType->addSetter($translationClass);
         } elseif ($classType->getType() === ClassType::TYPE_INTERFACE) {
             $translationInterfaceClass = null;
-            if (isset($storage->getInterfaces()[$this->getTranslationInterfaceName($classType)])) {
-                $translationInterfaceClass = $storage->getInterfaces()[$this->getTranslationInterfaceName($classType)];
+            if (isset($storage->all()[$this->getTranslationInterfaceName($classType)])) {
+                $translationInterfaceClass = $storage->all()[$this->getTranslationInterfaceName($classType)];
             }
 
             if (null === $translationInterfaceClass) {
@@ -179,7 +208,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
                 $translationInterfaceClass->addExtend(TranslationInterface::class);
                 $translationInterfaceClass->addExtend(ResourceInterface::class);
 
-                $storage->addInterfaces($translationInterfaceClass);
+                $storage->add($translationInterfaceClass, $translationInterfaceClass->getName());
             }
 
             $propType = StringPropType::create($this->name);

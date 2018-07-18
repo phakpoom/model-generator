@@ -2,9 +2,10 @@
 
 namespace Bonn\Generator\Model\Type;
 
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
-class ArrayPropType implements PropTypeInterface
+class ArrayPropType implements PropTypeInterface, DoctrineMappingInterface
 {
     private $name;
     private $defaultValue;
@@ -78,6 +79,16 @@ class ArrayPropType implements PropTypeInterface
         ;
 
         $method->setComment("\n@param array $$this->name \n");
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $field = $XMLElement->addChild('field');
+        $field->addAttribute('name', $this->name);
+        $field->addAttribute('type', 'array');
     }
 
     /**

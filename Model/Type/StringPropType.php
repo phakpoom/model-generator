@@ -2,9 +2,10 @@
 
 namespace Bonn\Generator\Model\Type;
 
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
-class StringPropType implements PropTypeInterface
+class StringPropType implements PropTypeInterface, DoctrineMappingInterface
 {
     private $name;
     private $defaultValue;
@@ -103,6 +104,16 @@ class StringPropType implements PropTypeInterface
         }
 
         $method->setComment("\n@param string $$this->name\n");
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $field = $XMLElement->addChild('field');
+        $field->addAttribute('name', $this->name);
+        $field->addAttribute('type', 'string');
     }
 
     /**

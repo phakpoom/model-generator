@@ -2,9 +2,10 @@
 
 namespace Bonn\Generator\Model\Type;
 
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
-class DatetimePropType implements PropTypeInterface
+class DatetimePropType implements PropTypeInterface, DoctrineMappingInterface
 {
     private $name;
     private $defaultValue;
@@ -81,6 +82,16 @@ class DatetimePropType implements PropTypeInterface
 
         $method->setComment("\n@param null|\\Datetime $$this->name \n");
         $parameter->setTypeHint('Datetime');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $field = $XMLElement->addChild('field');
+        $field->addAttribute('name', $this->name);
+        $field->addAttribute('type', 'datetime');
     }
 
     /**

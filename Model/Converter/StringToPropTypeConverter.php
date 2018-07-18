@@ -24,7 +24,6 @@ final class StringToPropTypeConverter implements StringToPropTypeConverterInterf
         IntPropType::class,
         DatetimePropType::class,
         FloatPropType::class,
-        StringPropType::class,
         InterfacePropType::class,
         TranslationPropType::class,
         ArrayPropType::class,

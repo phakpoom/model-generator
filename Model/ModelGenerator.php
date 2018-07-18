@@ -4,19 +4,24 @@ namespace Bonn\Generator\Model;
 
 use Bonn\Generator\Model\Converter\StringToPropTypeConverterInterface;
 use Bonn\Generator\Model\Type\ConstructorAwareInterface;
+use Bonn\Generator\Model\Type\DoctrineMappingInterface;
 use Bonn\Generator\Model\Type\IntPropType;
 use Bonn\Generator\Model\Type\ModifyClassAbleInterface;
 use Bonn\Generator\Model\Type\PropTypeInterface;
 use Bonn\Generator\Model\Type\StringPropType;
+use Bonn\Generator\NameResolver;
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 use Nette\PhpGenerator\PhpNamespace;
 use Sylius\Component\Resource\Model\CodeAwareInterface;
 use Sylius\Component\Resource\Model\ResourceInterface;
 use Sylius\Component\Resource\Model\TimestampableInterface;
 use Sylius\Component\Resource\Model\TimestampableTrait;
+use Sylius\Component\Resource\Model\ToggleableInterface;
+use Sylius\Component\Resource\Model\ToggleableTrait;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-final class ModelGenerator implements ModelGeneratorInterface
+final class ModelGenerator extends AbstractGenerator implements GeneratorInterface
 {
     /**
      * @var array
@@ -28,56 +33,27 @@ final class ModelGenerator implements ModelGeneratorInterface
      */
     private $interfaceUses = [];
 
-    /**
-     * @var OptionsResolver
-     */
-    private $optionResolver;
-
-    /**
-     * @var StringToPropTypeConverterInterface
-     */
-    private $propTypeConverter;
-
-    /**
-     * @var ClassGeneratedStorageInterface
-     */
-    private $storage;
-
-    public function __construct(ClassGeneratedStorageInterface $storage, StringToPropTypeConverterInterface $propTypeConverter)
+    public function __construct(CodeGeneratedStorageInterface $storage, StringToPropTypeConverterInterface $propTypeConverter)
     {
-        $this->propTypeConverter = $propTypeConverter;
-        $this->storage = $storage;
-        $this->optionResolver = new OptionsResolver();
-
-        $this->optionResolver->setDefaults([
-            'class' => null,
-            'info' => '',
-            'with_timestamp_able' => false,
-            'with_code' => false,
-        ]);
-
-        $this->optionResolver
-            ->setRequired('class')
-            ->setRequired('info');
+        parent::__construct($storage, $propTypeConverter);
     }
 
     /**
      * @param array $options
-     * @return array|ClassType[]
      */
-    public function generate($options = []): array
+    public function generate($options = [])
     {
         $options = $this->optionResolver->resolve($options);
         $fullClassName = $options['class'];
         $info = $options['info'];
 
-        $explodeClassName = explode('\\', $fullClassName);
-        $namespace = implode('\\', array_slice($explodeClassName, 0, count($explodeClassName) - 1));
+        $namespace = NameResolver::resolveNamespace($fullClassName);
 
         $classNamespace = new PhpNamespace($namespace);
 
         $interfaceNamespace = new PhpNamespace($namespace);
         $onlyClassName = NameResolver::resolveOnlyClassName($fullClassName);
+
         $modelClass = $classNamespace->addClass($onlyClassName);
         $interfaceClass = $interfaceNamespace->addInterface($onlyClassName . 'Interface');
 
@@ -110,6 +86,12 @@ final class ModelGenerator implements ModelGeneratorInterface
             $codePropType->addSetter($modelClass);
             $this->interfaceUses[] = CodeAwareInterface::class;
             $interfaceClass->addExtend(CodeAwareInterface::class);
+        }
+        if ($options['with_toggle']) {
+            $this->classUses[] = ToggleableTrait::class;
+            $modelClass->addTrait(ToggleableTrait::class);
+            $this->interfaceUses[] = ToggleableInterface::class;
+            $interfaceClass->addExtend(ToggleableInterface::class);
         }
 
         if (!empty($props)) {
@@ -146,17 +128,7 @@ final class ModelGenerator implements ModelGeneratorInterface
             $interfaceNamespace->addUse($use);
         }
 
-        $this->storage->addClasses($modelClass);
-        $this->storage->addInterfaces($interfaceClass);
-
-        return [$modelClass, $interfaceClass];
-    }
-
-    /**
-     * @return ClassGeneratedStorageInterface
-     */
-    public function getStorage(): ClassGeneratedStorageInterface
-    {
-        return $this->storage;
+        $this->storage->add($modelClass, $modelClass->getName());
+        $this->storage->add($interfaceClass, $interfaceClass->getName());
     }
 }

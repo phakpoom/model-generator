@@ -2,9 +2,10 @@
 
 namespace Bonn\Generator\Model\Type;
 
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
-class FloatPropType implements PropTypeInterface
+class FloatPropType implements PropTypeInterface, DoctrineMappingInterface
 {
     private $name;
     private $defaultValue;
@@ -101,6 +102,16 @@ class FloatPropType implements PropTypeInterface
         }
 
         $method->setComment("\n@param float $$this->name\n");
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $field = $XMLElement->addChild('field');
+        $field->addAttribute('name', $this->name);
+        $field->addAttribute('type', 'float');
     }
 
     /**

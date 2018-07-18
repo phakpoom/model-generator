@@ -2,10 +2,11 @@
 
 namespace Bonn\Generator\Model\Type;
 
-use Bonn\Generator\Model\NameResolver;
+use Bonn\Generator\NameResolver;
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
-class InterfacePropType implements PropTypeInterface
+class InterfacePropType implements PropTypeInterface, DoctrineMappingInterface
 {
     private $name;
     private $fullInterfaceName;
@@ -83,6 +84,22 @@ class InterfacePropType implements PropTypeInterface
 
         $method->setComment("\n@param null|$this->interfaceName $$this->name \n");
         $parameter->setTypeHint($this->fullInterfaceName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $field = $XMLElement->addChild('many-to-one');
+        $field->addAttribute('field', $this->name);
+        $field->addAttribute('target-entity', $this->fullInterfaceName);
+        $join = $field->addChild('join-column');
+
+        $join->addAttribute('name', NameResolver::camelToUnderScore(str_replace('Interface', '', $this->interfaceName)) . '_id');
+        $join->addAttribute('referenced-column-name', 'id');
+        $join->addAttribute('on-delete', 'SET NULL');
+        $join->addAttribute('nullable', 'true');
     }
 
     /**

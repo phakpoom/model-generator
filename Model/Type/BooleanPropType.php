@@ -2,9 +2,10 @@
 
 namespace Bonn\Generator\Model\Type;
 
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
-class BooleanPropType implements PropTypeInterface
+class BooleanPropType implements PropTypeInterface, DoctrineMappingInterface
 {
     private $name;
     private $defaultValue;
@@ -89,6 +90,16 @@ class BooleanPropType implements PropTypeInterface
     public function getUses(): array
     {
         return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function map(\SimpleXMLElement $XMLElement, CodeGeneratedStorageInterface $storage, array $options)
+    {
+        $field = $XMLElement->addChild('field');
+        $field->addAttribute('name', $this->name);
+        $field->addAttribute('type', 'boolean');
     }
 
     /**

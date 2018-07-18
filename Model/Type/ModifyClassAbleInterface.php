@@ -2,15 +2,15 @@
 
 namespace Bonn\Generator\Model\Type;
 
-use Bonn\Generator\Model\ClassGeneratedStorageInterface;
+use Bonn\Generator\Storage\CodeGeneratedStorageInterface;
 use Nette\PhpGenerator\ClassType;
 
 interface ModifyClassAbleInterface
 {
     /**
      * @param ClassType $classType
-     * @param ClassGeneratedStorageInterface $storage
+     * @param CodeGeneratedStorageInterface $storage
      * @return mixed
      */
-    public function modify(ClassType $classType, ClassGeneratedStorageInterface $storage);
+    public function modify(ClassType $classType, CodeGeneratedStorageInterface $storage);
 }
