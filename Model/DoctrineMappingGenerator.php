@@ -106,7 +106,7 @@ final class DoctrineMappingGenerator extends AbstractGenerator implements Genera
         $doctrineMapping = new \SimpleXMLElement('<doctrine-mapping />');
         $doctrineMapping->addAttribute('xmlns', 'http://doctrine-project.org/schemas/orm/doctrine-mapping');
         $doctrineMapping->addAttribute("xmlns:xmlns:xsi", 'http://www.w3.org/2001/XMLSchema-instance');
-        $doctrineMapping->addAttribute("xmlns:xsi:schemaLocation", "http://doctrine-project.org/schemas/orm/doctrine-mapping&#10;http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd");
+        $doctrineMapping->addAttribute("xmlns:xsi:schemaLocation", "http://doctrine-project.org/schemas/orm/doctrine-mapping\nhttp://doctrine-project.org/schemas/orm/doctrine-mapping.xsd");
 
         return $doctrineMapping;
     }
