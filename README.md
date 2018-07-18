@@ -25,7 +25,7 @@
         $container->setDefinition('bonn.generator.command.generate_model_command', $def);
         
         
-        $def = new Definition(Bonn\\Generator\\Command\\GenerateSyliusCommand);
+        $def = new Definition("Bonn\\Generator\\Command\\GenerateSyliusCommand");
         $def->addTag('console.command');
         $container->setDefinition('bonn.generator.command.generate_sylius_command', $def);
     }
