@@ -137,7 +137,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
             $id->addAttribute('name', 'id');
             $id->addAttribute('type', 'integer');
             $id->addChild('generator')->addAttribute('strategy', 'AUTO');
-            $mappedSuper->addAttribute('name', $fullClassName);
+            $mappedSuper->addAttribute('name', $fullClassName . 'Translation');
             $mappedSuper->addAttribute('table', strtolower(explode('\\', $fullClassName)[0]) . '_' . NameResolver::camelToUnderScore($onlyClassName) . '_translation');
 
             $storage->add($xml, $onlyClassName. 'Translation.orm.xml', $options['doctrine_resource_mapping_dir'] . $onlyClassName .'Translation.orm.xml');
