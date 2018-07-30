@@ -38,6 +38,9 @@ final class FormGenerator extends AbstractSyliusGenerator
         $validationGroup->addAttribute('type', 'collection');
         $validationGroup->addChild('argument', $options['resource_name']);
 
+        $tag = $service->addChild('tag');
+        $tag->addAttribute('name', 'form.type');
+
         $this->storage->add($formClass, $formClass->getName());
         $this->storage->add($service, $formClass->getName() . '-services');
     }
