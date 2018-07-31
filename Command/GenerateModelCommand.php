@@ -148,7 +148,7 @@ class GenerateModelCommand extends ContainerAwareCommand
             $interface = $helper->ask($input, $output, $question);
             $outputInfoString .= ':' . $interface;
         } elseif (!in_array($propertyType, [
-            TranslationPropType::getTypeName()
+            TranslationPropType::getTypeName(), 'image'
         ])) {
             $question = new Question('Enter default value (enter for skip)');
             $defaultValue = $helper->ask($input, $output, $question);

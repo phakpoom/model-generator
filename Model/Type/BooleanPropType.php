@@ -39,7 +39,7 @@ class BooleanPropType implements PropTypeInterface, DoctrineMappingInterface
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('private');
+            ->setVisibility('protected');
 
         $prop->setValue($this->defaultValue);
         $prop->setComment("\n@var bool\n");

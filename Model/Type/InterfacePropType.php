@@ -42,7 +42,7 @@ class InterfacePropType implements PropTypeInterface, DoctrineMappingInterface
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('private');
+            ->setVisibility('protected');
 
         $prop->setComment("\n@var null|$this->interfaceName\n");
     }

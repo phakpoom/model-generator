@@ -39,7 +39,7 @@ class StringPropType implements PropTypeInterface, DoctrineMappingInterface
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('private');
+            ->setVisibility('protected');
 
         $prop->setValue($this->defaultValue);
         if (null !== $this->defaultValue) {

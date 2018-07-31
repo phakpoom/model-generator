@@ -54,7 +54,7 @@ class CollectionPropType implements PropTypeInterface, ConstructorAwareInterface
     {
         $prop = $classType
             ->addProperty($this->name)
-            ->setVisibility('private');
+            ->setVisibility('protected');
 
         $prop->setComment("\n@var Collection|$this->interfaceName[]\n");
     }
