@@ -71,7 +71,7 @@ class CollectionPropType implements PropTypeInterface, ConstructorAwareInterface
 
         $method->setReturnNullable(false);
 
-        $method->setComment("\n@return Collection|$$this->interfaceName[]\n");
+        $method->setComment("\n@return Collection|$this->interfaceName[]\n");
 
         $method->setReturnType(Collection::class);
 
