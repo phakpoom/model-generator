@@ -108,8 +108,8 @@ final class ModelGenerator extends AbstractGenerator implements GeneratorInterfa
                 }
 
                 if ($prop instanceof ModifyClassAbleInterface) {
-                    $prop->modify($modelClass, $this->getStorage());
-                    $prop->modify($interfaceClass, $this->getStorage());
+                    $prop->modify($modelClass, $this->getStorage(), $classNamespace);
+                    $prop->modify($interfaceClass, $this->getStorage(), $interfaceNamespace);
                 }
 
                 $this->classUses = array_merge($this->classUses, $prop->getUses());
@@ -117,7 +117,7 @@ final class ModelGenerator extends AbstractGenerator implements GeneratorInterfa
             }
         }
 
-        $interfaceClass->getNamespace()->addUse(ResourceInterface::class);
+        $interfaceNamespace->addUse(ResourceInterface::class);
         $interfaceClass->addExtend(ResourceInterface::class);
 
         foreach ($this->classUses as $use) {

@@ -158,7 +158,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
     /**
      * {@inheritdoc}
      */
-    public function modify(ClassType $classType, CodeGeneratedStorageInterface $storage)
+    public function modify(ClassType $classType, CodeGeneratedStorageInterface $storage, PhpNamespace $namespace)
     {
         if ($classType->getType() === ClassType::TYPE_CLASS) {
             $translationClass = null;
@@ -168,12 +168,12 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
 
             if (null === $translationClass) {
                 $classType->addTrait(TranslatableTrait::class, [' __construct as protected initializeTranslationsCollection']);
-                $classType->getNamespace()->addUse(TranslatableTrait::class);
-                $classType->getNamespace()->addUse(TranslationInterface::class);
+                $namespace->addUse(TranslatableTrait::class);
+                $namespace->addUse(TranslationInterface::class);
                 $classType->addComment("@method " . $this->getTranslationInterfaceName($classType) . " getTranslation()");
                 $classType->getMethod('__construct')->addBody('$this->initializeTranslationsCollection();');
 
-                $classType->getNamespace()->addUse($this->getTranslationClassName($classType, true));
+                $namespace->addUse($this->getTranslationClassName($classType, true));
                 $classNamespace = new PhpNamespace($classType->getNamespace()->getName());
                 $classNamespace->addUse(AbstractTranslation::class);
                 $translationClass = $classNamespace->addClass($this->getTranslationClassName($classType));
@@ -198,10 +198,10 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
             }
 
             if (null === $translationInterfaceClass) {
-                $classType->getNamespace()->addUse(TranslatableInterface::class);
+                $namespace->addUse(TranslatableInterface::class);
                 $classType->addExtend(TranslatableInterface::class);
 
-                $interfaceNamespace = new PhpNamespace($classType->getNamespace()->getName());
+                $interfaceNamespace = new PhpNamespace($namespace->getName());
                 $interfaceNamespace->addUse(TranslationInterface::class);
                 $interfaceNamespace->addUse(ResourceInterface::class);
                 $translationInterfaceClass = $interfaceNamespace->addInterface($this->getTranslationInterfaceName($classType));
