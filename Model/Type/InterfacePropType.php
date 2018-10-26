@@ -44,7 +44,7 @@ class InterfacePropType implements PropTypeInterface, DoctrineMappingInterface
             ->addProperty($this->name)
             ->setVisibility('protected');
 
-        $prop->setComment("\n@var null|$this->interfaceName\n");
+        $prop->setComment("\n@var $this->interfaceName|null\n");
     }
 
     /**
@@ -59,7 +59,7 @@ class InterfacePropType implements PropTypeInterface, DoctrineMappingInterface
 
         $method->setReturnNullable(true);
 
-        $method->setComment("\n@return null|$this->interfaceName\n");
+        $method->setComment("\n@return $this->interfaceName|null\n");
 
         $method->setReturnType($this->fullInterfaceName);
 
@@ -82,7 +82,7 @@ class InterfacePropType implements PropTypeInterface, DoctrineMappingInterface
             ->setNullable(true)
         ;
 
-        $method->setComment("\n@param null|$this->interfaceName $$this->name \n");
+        $method->setComment("\n@param $this->interfaceName|null $$this->name \n");
         $parameter->setTypeHint($this->fullInterfaceName);
     }
 

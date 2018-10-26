@@ -63,7 +63,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
         $method->setReturnType('string');
         $method
             ->setBody('return $this->getTranslation()->get' . ucfirst($this->name) . '();')
-            ->setComment("\n@return null|string\n");
+            ->setComment("\n@return string|null\n");
     }
 
     /**
@@ -83,7 +83,7 @@ class TranslationPropType implements PropTypeInterface, ModifyClassAbleInterface
             ->setNullable(true)
             ->setTypeHint('string');
 
-        $method->setComment("\n@param null|string $$this->name \n");
+        $method->setComment("\n@param string|null $$this->name \n");
 
         if ($classType->getType() === ClassType::TYPE_CLASS) {
             $method = $classType

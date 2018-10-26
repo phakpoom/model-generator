@@ -103,7 +103,7 @@ class BooleanPropType implements PropTypeInterface, DoctrineMappingInterface
     }
 
     /**
-     * @param null|string $v
+     * @param string|null $v
      * @return bool
      */
     private function convertDefaultValue(?string $v)

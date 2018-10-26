@@ -48,7 +48,7 @@ class FloatPropType implements PropTypeInterface, DoctrineMappingInterface
             return;
         }
 
-        $prop->setComment("\n@var null|float\n");
+        $prop->setComment("\n@var float|null\n");
     }
 
     /**
@@ -69,7 +69,7 @@ class FloatPropType implements PropTypeInterface, DoctrineMappingInterface
             ->setBody('return $this->' . $this->name . ';');
 
         if ($isNullable) {
-            $method->setComment("\n@return null|float\n");
+            $method->setComment("\n@return float|null\n");
 
             return;
         }
@@ -96,7 +96,7 @@ class FloatPropType implements PropTypeInterface, DoctrineMappingInterface
         ;
 
         if ($isNullable) {
-            $method->setComment("\n@param null|float $$this->name \n");
+            $method->setComment("\n@param float|null $$this->name \n");
 
             return;
         }
@@ -123,7 +123,7 @@ class FloatPropType implements PropTypeInterface, DoctrineMappingInterface
     }
 
     /**
-     * @param null|string $v
+     * @param string|null $v
      * @return float|null
      */
     private function convertDefaultValue(?string $v)

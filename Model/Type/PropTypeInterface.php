@@ -8,7 +8,7 @@ interface PropTypeInterface
 {
     /**
      * @param string $name
-     * @param null|string|null $defaultValue
+     * @param string|null|null $defaultValue
      * @return PropTypeInterface
      */
     public static function create(string $name, ?string $defaultValue = null): PropTypeInterface;

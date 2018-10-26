@@ -48,7 +48,7 @@ class IntPropType implements PropTypeInterface, DoctrineMappingInterface
             return;
         }
 
-        $prop->setComment("\n@var null|int\n");
+        $prop->setComment("\n@var int|null\n");
     }
 
     /**
@@ -69,7 +69,7 @@ class IntPropType implements PropTypeInterface, DoctrineMappingInterface
             ->setBody('return $this->' . $this->name . ';');
 
         if ($isNullable) {
-            $method->setComment("\n@return null|int\n");
+            $method->setComment("\n@return int|null\n");
 
             return;
         }
@@ -96,7 +96,7 @@ class IntPropType implements PropTypeInterface, DoctrineMappingInterface
         ;
 
         if ($isNullable) {
-            $method->setComment("\n@param null|int $$this->name \n");
+            $method->setComment("\n@param int|null $$this->name \n");
 
             return;
         }
@@ -123,7 +123,7 @@ class IntPropType implements PropTypeInterface, DoctrineMappingInterface
     }
 
     /**
-     * @param null|string $v
+     * @param string|null $v
      * @return int|null
      */
     private function convertDefaultValue(?string $v)

@@ -37,7 +37,7 @@ class Code
     }
 
     /**
-     * @param null|string $outputPath
+     * @param string|null $outputPath
      */
     public function setOutputPath(?string $outputPath)
     {

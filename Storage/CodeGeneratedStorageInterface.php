@@ -17,7 +17,7 @@ interface CodeGeneratedStorageInterface
     /**
      * @param $data
      * @param string $identifier
-     * @param null|string|null $outputPath
+     * @param string|null|null $outputPath
      */
     public function add($data, string $identifier, ?string $outputPath = null);
 

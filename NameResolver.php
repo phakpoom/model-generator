@@ -6,7 +6,7 @@ class NameResolver
 {
     /**
      * @param string $string
-     * @return null|string
+     * @return string|null
      */
     public static function resolveOnlyInterfaceName(string $string): ?string
     {
@@ -21,7 +21,7 @@ class NameResolver
 
     /**
      * @param string $string
-     * @return null|string
+     * @return string|null
      */
     public static function resolveOnlyClassName(string $string): ?string
     {

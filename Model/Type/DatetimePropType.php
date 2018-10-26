@@ -42,7 +42,7 @@ class DatetimePropType implements PropTypeInterface, DoctrineMappingInterface
             ->setVisibility('protected');
 
         $prop->setValue($this->defaultValue);
-        $prop->setComment("\n@var null|\\Datetime\n");
+        $prop->setComment("\n@var \\Datetime|null\n");
     }
 
     /**
@@ -57,7 +57,7 @@ class DatetimePropType implements PropTypeInterface, DoctrineMappingInterface
 
         $method->setReturnNullable(true);
 
-        $method->setComment("\n@return null|\\Datetime\n");
+        $method->setComment("\n@return \\Datetime|null\n");
 
         $method->setReturnType('Datetime');
 
@@ -80,7 +80,7 @@ class DatetimePropType implements PropTypeInterface, DoctrineMappingInterface
             ->setNullable(true)
         ;
 
-        $method->setComment("\n@param null|\\Datetime $$this->name \n");
+        $method->setComment("\n@param \\Datetime|null $$this->name \n");
         $parameter->setTypeHint('Datetime');
     }
 

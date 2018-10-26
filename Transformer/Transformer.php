@@ -26,7 +26,7 @@ final class Transformer
 
     /**
      * @param $data
-     * @param null|string $outputPath
+     * @param string|null $outputPath
      * @param array $options
      * @return Code
      */

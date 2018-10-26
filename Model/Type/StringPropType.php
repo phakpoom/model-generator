@@ -48,7 +48,7 @@ class StringPropType implements PropTypeInterface, DoctrineMappingInterface
             return;
         }
 
-        $prop->setComment("\n@var null|string\n");
+        $prop->setComment("\n@var string|null\n");
     }
 
     /**
@@ -69,7 +69,7 @@ class StringPropType implements PropTypeInterface, DoctrineMappingInterface
             ->setBody('return $this->' . $this->name . ';');
 
         if ($isNullable) {
-            $method->setComment("\n@return null|string\n");
+            $method->setComment("\n@return string|null\n");
 
             return;
         }
@@ -98,7 +98,7 @@ class StringPropType implements PropTypeInterface, DoctrineMappingInterface
         ;
 
         if ($isNullable) {
-            $method->setComment("\n@param null|string $$this->name \n");
+            $method->setComment("\n@param string|null $$this->name \n");
 
             return;
         }
